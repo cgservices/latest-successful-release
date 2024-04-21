@@ -1,6 +1,6 @@
 import { Octokit } from '@octokit/rest'
 
-import { getLatestWorkflow } from './get-latest-workflow'
+import { getLatestWorkflow, releaseWorkflowPath } from './get-latest-workflow'
 import { workflowRunFactory } from '../../test-factory/workflow-run-factory'
 
 const mockGetWorkflowRuns = jest.fn()
@@ -24,7 +24,7 @@ describe('get latest workflow', () => {
         workflow_runs: [
           workflowRunFactory.build({
             run_number: 1,
-            path: '.github/workflows/ci.yml',
+            path: releaseWorkflowPath,
             conclusion: 'failure'
           })
         ]
@@ -36,7 +36,7 @@ describe('get latest workflow', () => {
       { sha: 'sha' },
       'owner',
       'repo',
-      '.github/workflows/ci.yml'
+      releaseWorkflowPath
     )
 
     expect(latestRelease).toMatchObject({ conclusion: 'failure' })
@@ -48,12 +48,12 @@ describe('get latest workflow', () => {
         workflow_runs: [
           workflowRunFactory.build({
             run_number: 1,
-            path: '.github/workflows/ci.yml',
+            path: releaseWorkflowPath,
             conclusion: 'failure'
           }),
           workflowRunFactory.build({
             run_number: 2,
-            path: '.github/workflows/ci.yml',
+            path: releaseWorkflowPath,
             conclusion: 'success'
           })
         ]
@@ -65,7 +65,7 @@ describe('get latest workflow', () => {
       { sha: 'sha' },
       'owner',
       'repo',
-      '.github/workflows/ci.yml'
+      releaseWorkflowPath
     )
     expect(mockGetWorkflowRuns).toHaveBeenCalledWith({
       branch: 'main',
@@ -85,25 +85,19 @@ describe('get latest workflow', () => {
         workflow_runs: [
           workflowRunFactory.build({
             run_number: 1,
-            path: '.github/workflows/ci.yml',
+            path: releaseWorkflowPath,
             conclusion: 'failure'
           }),
           workflowRunFactory.build({
             run_number: 2,
-            path: '.github/workflows/ci.yml',
+            path: releaseWorkflowPath,
             conclusion: 'success'
           })
         ]
       }
     })
 
-    await getLatestWorkflow(
-      client,
-      {},
-      'owner',
-      'repo',
-      '.github/workflows/ci.yml'
-    )
+    await getLatestWorkflow(client, {}, 'owner', 'repo', releaseWorkflowPath)
     expect(mockGetWorkflowRuns).toHaveBeenCalledWith({
       branch: 'main',
       undefined,
