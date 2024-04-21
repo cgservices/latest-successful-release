@@ -1,0 +1,33 @@
+name: Prepare pipeline
+description: This prepares the pipeline to run code.
+
+runs:
+  using: composite
+  steps:
+    - name: Get node version
+      uses: ./.github/actions/get-node-version
+      id: get-node-version
+
+    - name: Get pnpm version
+      id: get-pnpm-version
+      shell: bash
+      run: |
+        set -x
+        PNPM_VERSION=$(jq -r '.engines.pnpm' < package.json)
+        echo "value=${PNPM_VERSION}" >> "$GITHUB_OUTPUT"
+
+    - uses: pnpm/action-setup@a3252b78c470c02df07e9d59298aecedc3ccdd6d # v3.0.0
+      with:
+        version: ${{ steps.get-pnpm-version.outputs.value }}
+
+    - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+      with:
+        node-version: ${{ steps.get-node-version.outputs.value }}
+        cache: pnpm
+
+    - name: Install dependencies
+      shell: bash
+      run: |
+        set -x
+        pnpm -v
+        pnpm install

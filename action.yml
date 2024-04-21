@@ -1,0 +1,29 @@
+name: 'The name of your action here'
+description: 'Provide a description here'
+author: 'Your name or organization here'
+
+# Add your action's branding here. This will appear on the GitHub Marketplace.
+branding:
+  icon: 'heart'
+  color: 'red'
+
+# Define your inputs here.
+inputs:
+  github-token:
+    description: 'Your github token'
+    required: true
+  github-repo:
+    description: 'Your github repository'
+    required: true
+  github-repo-owner:
+    description: 'The github repository owner'
+    required: true
+
+# Define your outputs here.
+outputs:
+  time:
+    description: 'Your output description here'
+
+runs:
+  using: node20
+  main: dist/index.js
