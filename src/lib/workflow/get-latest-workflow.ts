@@ -8,7 +8,8 @@ export const getLatestWorkflow = async (
   octokit: Octokit,
   options: { sha?: string } = {},
   owner: string,
-  repo: string
+  repo: string,
+  workflowPath: string = releaseWorkflowPath
 ) => {
   const workflowRuns = await octokit.rest.actions.listWorkflowRunsForRepo({
     owner,
@@ -20,7 +21,7 @@ export const getLatestWorkflow = async (
     headers
   })
   const releaseWorkflows = workflowRuns.data.workflow_runs
-    .filter(({ path }) => path === releaseWorkflowPath)
+    .filter(({ path }) => path === workflowPath)
     .map(workflowRun => ({
       runNumber: workflowRun.run_number,
       startedAt: workflowRun.run_started_at,

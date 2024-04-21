@@ -35,7 +35,8 @@ describe('get latest workflow', () => {
       client,
       { sha: 'sha' },
       'owner',
-      'repo'
+      'repo',
+      releaseWorkflowPath
     )
 
     expect(latestRelease).toMatchObject({ conclusion: 'failure' })
@@ -63,10 +64,49 @@ describe('get latest workflow', () => {
       client,
       { sha: 'sha' },
       'owner',
-      'repo'
+      'repo',
+      releaseWorkflowPath
     )
-
+    expect(mockGetWorkflowRuns).toHaveBeenCalledWith({
+      branch: 'main',
+      head_sha: 'sha',
+      headers: { 'X-GitHub-Api-Version': '2022-11-28' },
+      owner: 'owner',
+      per_page: 100,
+      repo: 'repo',
+      status: 'completed'
+    })
     expect(latestRelease).toMatchObject({ runNumber: 2 })
+  })
+
+  it('should run when sha missing', async () => {
+    mockGetWorkflowRuns.mockResolvedValue({
+      data: {
+        workflow_runs: [
+          workflowRunFactory.build({
+            run_number: 1,
+            path: releaseWorkflowPath,
+            conclusion: 'failure'
+          }),
+          workflowRunFactory.build({
+            run_number: 2,
+            path: releaseWorkflowPath,
+            conclusion: 'success'
+          })
+        ]
+      }
+    })
+
+    await getLatestWorkflow(client, {}, 'owner', 'repo', releaseWorkflowPath)
+    expect(mockGetWorkflowRuns).toHaveBeenCalledWith({
+      branch: 'main',
+      undefined,
+      headers: { 'X-GitHub-Api-Version': '2022-11-28' },
+      owner: 'owner',
+      per_page: 100,
+      repo: 'repo',
+      status: 'completed'
+    })
   })
 
   it('should return null when workflow is not found', async () => {
@@ -76,13 +116,7 @@ describe('get latest workflow', () => {
       }
     })
 
-    const latestRelease = await getLatestWorkflow(
-      client,
-      { sha: 'sha' },
-      'owner',
-      'repo'
-    )
-
+    const latestRelease = await getLatestWorkflow(client, {}, 'owner', 'repo')
     expect(latestRelease).toBeNull()
   })
 })

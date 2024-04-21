@@ -55,6 +55,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           github-repo: 'latest-successful-release'
           github-repo-owner: ${{ github.repository_owner }}
+          release-workflow-path: '.github/workflows/release.yml'
 
       - name: Print Output
         id: output

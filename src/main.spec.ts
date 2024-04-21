@@ -18,6 +18,15 @@ jest.mock('@octokit/rest', () => ({
   }
 }))
 
+jest.mock('@actions/core', () => ({
+  getInput: jest.fn((name: string) => {
+    if (name === 'github-token') return 'token'
+    if (name === 'github-repo') return 'repo'
+    if (name === 'github-repo-owner') return 'owner'
+    if (name === 'release-workflow-path') return '.github/workflows/ci.yml'
+  })
+}))
+
 describe('get latest successful release', () => {
   beforeEach(jest.clearAllMocks)
 
