@@ -1,13 +1,12 @@
-name: 'The name of your action here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: Get latest successful release
+description: Get latest successful release
+author: 'Recharge'
 
-# Add your action's branding here. This will appear on the GitHub Marketplace.
+
 branding:
   icon: 'heart'
-  color: 'red'
+  color: 'green'
 
-# Define your inputs here.
 inputs:
   github-token:
     description: 'Your github token'
@@ -18,11 +17,14 @@ inputs:
   github-repo-owner:
     description: 'The github repository owner'
     required: true
+  release-workflow-path:
+    description: 'The path to the release workflow'
+    required: true
 
-# Define your outputs here.
 outputs:
-  time:
-    description: 'Your output description here'
+  latest-successful-release:
+    description: The commit sha of the latest successful release
+    value: ${{ steps.get-latest-successful-release.outputs.value }}
 
 runs:
   using: node20

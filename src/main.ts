@@ -8,6 +8,7 @@ const headers = { 'X-GitHub-Api-Version': '2022-11-28' }
 const GITHUB_TOKEN = core.getInput('github-token')
 const REPO = core.getInput('github-repo')
 const REPO_OWNER = core.getInput('github-repo-owner')
+const RELEASE_WORKFLOW_PATH = core.getInput('release-workflow-path')
 
 const getCommits = async (octokit: Octokit) => {
   const { data } = await octokit.rest.repos.listCommits({
@@ -33,11 +34,13 @@ export const run = async () => {
 
   const commitStatus = await Promise.all(
     commits.map(async commit => {
+      
       const workflowRun = await getLatestWorkflow(
         octokit,
         { sha: commit.sha },
         REPO_OWNER,
-        REPO
+        REPO,
+        RELEASE_WORKFLOW_PATH
       )
       return { ...commit, ...workflowRun }
     })

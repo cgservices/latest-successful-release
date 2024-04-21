@@ -1,7 +1,8 @@
 import { Octokit } from '@octokit/rest'
 
-import { getLatestWorkflow, releaseWorkflowPath } from './get-latest-workflow'
+import { getLatestWorkflow } from './get-latest-workflow'
 import { workflowRunFactory } from '../../test-factory/workflow-run-factory'
+import { he } from 'date-fns/locale'
 
 const mockGetWorkflowRuns = jest.fn()
 
@@ -24,7 +25,7 @@ describe('get latest workflow', () => {
         workflow_runs: [
           workflowRunFactory.build({
             run_number: 1,
-            path: releaseWorkflowPath,
+            path: '.github/workflows/ci.yml',
             conclusion: 'failure'
           })
         ]
@@ -35,7 +36,8 @@ describe('get latest workflow', () => {
       client,
       { sha: 'sha' },
       'owner',
-      'repo'
+      'repo',
+      '.github/workflows/ci.yml'
     )
 
     expect(latestRelease).toMatchObject({ conclusion: 'failure' })
@@ -47,12 +49,12 @@ describe('get latest workflow', () => {
         workflow_runs: [
           workflowRunFactory.build({
             run_number: 1,
-            path: releaseWorkflowPath,
+            path: '.github/workflows/ci.yml',
             conclusion: 'failure'
           }),
           workflowRunFactory.build({
             run_number: 2,
-            path: releaseWorkflowPath,
+            path: '.github/workflows/ci.yml',
             conclusion: 'success'
           })
         ]
@@ -61,12 +63,58 @@ describe('get latest workflow', () => {
 
     const latestRelease = await getLatestWorkflow(
       client,
-      { sha: 'sha' },
+      {sha: 'sha'},
       'owner',
-      'repo'
+      'repo',
+      '.github/workflows/ci.yml'
     )
-
+    expect(mockGetWorkflowRuns).toHaveBeenCalledWith({
+      branch: 'main',
+      head_sha: 'sha',
+      headers: { 'X-GitHub-Api-Version': '2022-11-28' },
+      owner: 'owner',
+      per_page: 100,
+      repo: 'repo',
+      status: 'completed'
+    })
     expect(latestRelease).toMatchObject({ runNumber: 2 })
+  })
+
+  it('should run when sha missing', async () => {
+    mockGetWorkflowRuns.mockResolvedValue({
+      data: {
+        workflow_runs: [
+          workflowRunFactory.build({
+            run_number: 1,
+            path: '.github/workflows/ci.yml',
+            conclusion: 'failure'
+          }),
+          workflowRunFactory.build({
+            run_number: 2,
+            path: '.github/workflows/ci.yml',
+            conclusion: 'success'
+          })
+        ]
+      }
+    })
+
+    await getLatestWorkflow(
+      client,
+      {},
+      'owner',
+      'repo',
+      '.github/workflows/ci.yml'
+    )
+    expect(mockGetWorkflowRuns).toHaveBeenCalledWith({
+      branch: 'main',
+      undefined,
+      headers: { 'X-GitHub-Api-Version': '2022-11-28' },
+      owner: 'owner',
+      per_page: 100,
+      repo: 'repo',
+      status: 'completed'
+    })
+
   })
 
   it('should return null when workflow is not found', async () => {
@@ -78,11 +126,10 @@ describe('get latest workflow', () => {
 
     const latestRelease = await getLatestWorkflow(
       client,
-      { sha: 'sha' },
+      { },
       'owner',
       'repo'
     )
-
     expect(latestRelease).toBeNull()
   })
 })
