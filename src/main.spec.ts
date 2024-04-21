@@ -24,7 +24,7 @@ jest.mock('@actions/core', () => ({
     if (name === 'github-repo') return 'repo'
     if (name === 'github-repo-owner') return 'owner'
     if (name === 'release-workflow-path') return '.github/workflows/ci.yml'
-  }),
+  })
 }))
 
 describe('get latest successful release', () => {

@@ -34,7 +34,6 @@ export const run = async () => {
 
   const commitStatus = await Promise.all(
     commits.map(async commit => {
-      
       const workflowRun = await getLatestWorkflow(
         octokit,
         { sha: commit.sha },

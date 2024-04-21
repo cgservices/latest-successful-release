@@ -50137,7 +50137,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getLatestWorkflow = exports.releaseWorkflowPath = void 0;
 exports.releaseWorkflowPath = '.github/workflows/ci.yml';
 const headers = { 'X-GitHub-Api-Version': '2022-11-28' };
-const getLatestWorkflow = async (octokit, options = {}, owner, repo) => {
+const getLatestWorkflow = async (octokit, options = {}, owner, repo, workflowPath = exports.releaseWorkflowPath) => {
     const workflowRuns = await octokit.rest.actions.listWorkflowRunsForRepo({
         owner,
         repo,
@@ -50148,7 +50148,7 @@ const getLatestWorkflow = async (octokit, options = {}, owner, repo) => {
         headers
     });
     const releaseWorkflows = workflowRuns.data.workflow_runs
-        .filter(({ path }) => path === exports.releaseWorkflowPath)
+        .filter(({ path }) => path === workflowPath)
         .map(workflowRun => ({
         runNumber: workflowRun.run_number,
         startedAt: workflowRun.run_started_at,
@@ -50208,6 +50208,7 @@ const headers = { 'X-GitHub-Api-Version': '2022-11-28' };
 const GITHUB_TOKEN = core.getInput('github-token');
 const REPO = core.getInput('github-repo');
 const REPO_OWNER = core.getInput('github-repo-owner');
+const RELEASE_WORKFLOW_PATH = core.getInput('release-workflow-path');
 const getCommits = async (octokit) => {
     const { data } = await octokit.rest.repos.listCommits({
         owner: REPO_OWNER,
@@ -50228,7 +50229,7 @@ const run = async () => {
     });
     const commits = await getCommits(octokit);
     const commitStatus = await Promise.all(commits.map(async (commit) => {
-        const workflowRun = await (0, get_latest_workflow_1.getLatestWorkflow)(octokit, { sha: commit.sha }, REPO_OWNER, REPO);
+        const workflowRun = await (0, get_latest_workflow_1.getLatestWorkflow)(octokit, { sha: commit.sha }, REPO_OWNER, REPO, RELEASE_WORKFLOW_PATH);
         return { ...commit, ...workflowRun };
     }));
     const sortedReleases = [...commitStatus.filter(truthy_1.truthy)].sort((a, b) => (0, date_fns_1.isBefore)(new Date(a.commitDate), new Date(b.commitDate)) ? 1 : -1);

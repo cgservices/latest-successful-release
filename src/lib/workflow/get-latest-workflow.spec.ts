@@ -2,7 +2,6 @@ import { Octokit } from '@octokit/rest'
 
 import { getLatestWorkflow } from './get-latest-workflow'
 import { workflowRunFactory } from '../../test-factory/workflow-run-factory'
-import { he } from 'date-fns/locale'
 
 const mockGetWorkflowRuns = jest.fn()
 
@@ -63,7 +62,7 @@ describe('get latest workflow', () => {
 
     const latestRelease = await getLatestWorkflow(
       client,
-      {sha: 'sha'},
+      { sha: 'sha' },
       'owner',
       'repo',
       '.github/workflows/ci.yml'
@@ -114,7 +113,6 @@ describe('get latest workflow', () => {
       repo: 'repo',
       status: 'completed'
     })
-
   })
 
   it('should return null when workflow is not found', async () => {
@@ -124,12 +122,7 @@ describe('get latest workflow', () => {
       }
     })
 
-    const latestRelease = await getLatestWorkflow(
-      client,
-      { },
-      'owner',
-      'repo'
-    )
+    const latestRelease = await getLatestWorkflow(client, {}, 'owner', 'repo')
     expect(latestRelease).toBeNull()
   })
 })
