@@ -25,7 +25,7 @@ const getCommits = async (octokit: Octokit) => {
   }))
 }
 
-export const run = async () => {
+export const getLatestSuccessfulRelease = async () => {
   const octokit = new Octokit({
     auth: GITHUB_TOKEN
   })

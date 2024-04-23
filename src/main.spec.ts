@@ -1,4 +1,4 @@
-import { run } from './main'
+import { getLatestSuccessfulRelease } from './main'
 
 import { releaseWorkflowPath } from './lib/workflow/get-latest-workflow'
 import { commitFactory } from './test-factory/commit-factory'
@@ -50,7 +50,7 @@ describe('get latest successful release', () => {
       }
     })
 
-    const latestRelease = await run()
+    const latestRelease = await getLatestSuccessfulRelease()
 
     expect(latestRelease).toMatchObject({ sha: 'sha-1' })
   })
@@ -78,7 +78,7 @@ describe('get latest successful release', () => {
       }
     })
 
-    const latestRelease = await run()
+    const latestRelease = await getLatestSuccessfulRelease()
 
     expect(latestRelease).toMatchObject({ sha: 'sha-1' })
   })
@@ -111,7 +111,7 @@ describe('get latest successful release', () => {
       }
     })
 
-    const latestRelease = await run()
+    const latestRelease = await getLatestSuccessfulRelease()
 
     expect(latestRelease).toMatchObject({ sha: 'sha-2' })
   })
@@ -131,7 +131,7 @@ describe('get latest successful release', () => {
       }
     })
 
-    const result = run()
+    const result = getLatestSuccessfulRelease()
 
     await expect(result).rejects.toEqual(
       new Error('Unable to find latest successful release')
@@ -148,7 +148,7 @@ describe('get latest successful release', () => {
       }
     })
 
-    const result = run()
+    const result = getLatestSuccessfulRelease()
 
     await expect(result).rejects.toEqual(
       new Error('Unable to find latest successful release')
