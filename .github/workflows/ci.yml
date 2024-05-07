@@ -56,8 +56,3 @@ jobs:
           github-repo: 'latest-successful-release'
           github-repo-owner: ${{ github.repository_owner }}
           release-workflow-path: '.github/workflows/release.yml'
-
-      - name: Print Output
-        run:
-          echo "value=${{steps.latest-successful-release.outputs.commit-sha}}"
-          >> "$GITHUB_OUTPUT"
