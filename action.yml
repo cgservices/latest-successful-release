@@ -27,5 +27,4 @@ outputs:
 
 runs:
   using: node20
-  id: latest-successful-release
   main: 'dist/index.js'
