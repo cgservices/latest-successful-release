@@ -20,6 +20,8 @@ export const getLatestWorkflow = async (
     per_page: 100,
     headers
   })
+  console.log('workflowRuns', workflowRuns)
+
   const releaseWorkflows = workflowRuns.data.workflow_runs
     .filter(({ path }) => path === workflowPath)
     .map(workflowRun => ({
@@ -31,6 +33,7 @@ export const getLatestWorkflow = async (
       status: workflowRun.status,
       conclusion: workflowRun.conclusion
     }))
+  console.log('releaseWorkflows', releaseWorkflows)
 
   if (!releaseWorkflows.length) {
     return null
