@@ -52146,7 +52146,7 @@ const core_1 = __nccwpck_require__(9093);
     (0, core_1.setOutput)('commit-sha', JSON.stringify(latestSuccessfulRelease.sha));
 })
     .catch(error => {
-    (0, core_1.warning)('Unable to get latest successful release');
+    (0, core_1.info)(error);
     (0, core_1.setOutput)('error', JSON.stringify(error.message));
 });
 
