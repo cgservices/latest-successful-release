@@ -50147,10 +50147,8 @@ const getLatestWorkflow = async (octokit, options = {}, owner, repo, workflowPat
         per_page: 100,
         headers
     });
-    // console.log('workflowRuns', workflowRuns)
     const releaseWorkflows = workflowRuns.data.workflow_runs
         .filter(workflow => {
-        console.log('workflow', workflow, workflowPath, workflow.path === workflowPath);
         return workflow.path === workflowPath;
     })
         .map(workflowRun => ({
@@ -50162,12 +50160,10 @@ const getLatestWorkflow = async (octokit, options = {}, owner, repo, workflowPat
         status: workflowRun.status,
         conclusion: workflowRun.conclusion
     }));
-    // console.log('releaseWorkflows', releaseWorkflows)
     if (!releaseWorkflows.length) {
         return null;
     }
     const sortedWorkflowRuns = [...releaseWorkflows].sort((a, b) => a.runNumber < b.runNumber ? 1 : -1);
-    console.log('sortedWorkflowRuns', sortedWorkflowRuns[0]);
     return sortedWorkflowRuns[0];
 };
 exports.getLatestWorkflow = getLatestWorkflow;
@@ -50236,13 +50232,10 @@ const getLatestSuccessfulRelease = async () => {
     const commits = await getCommits(octokit);
     const commitStatus = await Promise.all(commits.map(async (commit) => {
         const workflowRun = await (0, get_latest_workflow_1.getLatestWorkflow)(octokit, { sha: commit.sha }, REPO_OWNER, REPO, RELEASE_WORKFLOW_PATH);
-        console.log('workflowRun', workflowRun);
         return { ...commit, ...workflowRun };
     }));
-    // console.log('commitStatus', commitStatus)
     const sortedReleases = [...commitStatus.filter(truthy_1.truthy)].sort((a, b) => (0, date_fns_1.isBefore)(new Date(a.commitDate), new Date(b.commitDate)) ? 1 : -1);
     const latestSuccessRelease = sortedReleases.find(({ status, conclusion }) => status === 'completed' && conclusion === 'success');
-    console.log('sortedReleases', sortedReleases);
     if (!latestSuccessRelease) {
         throw new Error('Unable to find latest successful release');
     }
