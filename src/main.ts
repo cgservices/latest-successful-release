@@ -44,6 +44,7 @@ export const getLatestSuccessfulRelease = async () => {
       return { ...commit, ...workflowRun }
     })
   )
+  console.log('commitStatus', commitStatus)
 
   const sortedReleases = [...commitStatus.filter(truthy)].sort((a, b) =>
     isBefore(new Date(a.commitDate), new Date(b.commitDate)) ? 1 : -1
@@ -52,6 +53,7 @@ export const getLatestSuccessfulRelease = async () => {
     ({ status, conclusion }) =>
       status === 'completed' && conclusion === 'success'
   )
+  console.log('sortedReleases', sortedReleases)
 
   if (!latestSuccessRelease) {
     throw new Error('Unable to find latest successful release')
