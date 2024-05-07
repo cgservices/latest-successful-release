@@ -1,15 +1,14 @@
 import { getLatestSuccessfulRelease } from './main'
-import { setOutput } from '@actions/core'
+import { setOutput, info } from '@actions/core'
 
 getLatestSuccessfulRelease()
   .then(latestSuccessfulRelease => {
-    console.log(
-      `Latest successful release: ${JSON.stringify(latestSuccessfulRelease)}`
-    )
-    setOutput(
-      'latestSuccessfulRelease',
+    info('SUCCESS: Output to the actions build log')
+    const output = setOutput(
+      'latest-successful-release',
       JSON.stringify(latestSuccessfulRelease)
     )
+    console.log(output)
   })
   .catch(error => {
     console.warn(`Unable to get latest successful release: ${error.message}`)

@@ -23,18 +23,9 @@ inputs:
 outputs:
   latest-successful-release:
     description: The commit sha of the latest successful release
-    value: ${{ steps.get-latest-successful-release.outputs.value }}
-
-# runs:
-#   using: composite
-#   steps:
-#     - name: Get the latest successful release
-#       id: get-latest-successful-release
-#       shell: bash
-#       run:
-#         echo "value=${LATEST_SUCCESSFUL_RELEASE}" >> "$GITHUB_OUTPUT"
+    value: ${{ steps.latest-successful-release.outputs.value }}
 
 runs:
   using: node20
-  id: get-latest-successful-release
+  id: latest-successful-release
   main: 'dist/index.js'
