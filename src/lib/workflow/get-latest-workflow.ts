@@ -24,7 +24,12 @@ export const getLatestWorkflow = async (
 
   const releaseWorkflows = workflowRuns.data.workflow_runs
     .filter(workflow => {
-      console.log('workflow', workflow)
+      console.log(
+        'workflow',
+        workflow,
+        workflowPath,
+        workflow.path === workflowPath
+      )
       return workflow.path === workflowPath
     })
     .map(workflowRun => ({
