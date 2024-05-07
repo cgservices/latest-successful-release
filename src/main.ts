@@ -41,10 +41,12 @@ export const getLatestSuccessfulRelease = async () => {
         REPO,
         RELEASE_WORKFLOW_PATH
       )
+      console.log('workflowRun', workflowRun)
+
       return { ...commit, ...workflowRun }
     })
   )
-  console.log('commitStatus', commitStatus)
+  // console.log('commitStatus', commitStatus)
 
   const sortedReleases = [...commitStatus.filter(truthy)].sort((a, b) =>
     isBefore(new Date(a.commitDate), new Date(b.commitDate)) ? 1 : -1
