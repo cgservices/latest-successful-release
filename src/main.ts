@@ -53,10 +53,9 @@ export const getLatestSuccessfulRelease = async () => {
       status === 'completed' && conclusion === 'success'
   )
 
-  if (!sortedReleases[0]) {
-    throw new Error(`Unable to find latest successful release`)
+  if (!latestSuccessRelease) {
+    throw new Error('Unable to find latest successful release')
   }
-  console.log('FOUND!', sortedReleases[0], latestSuccessRelease)
 
-  return sortedReleases[0]
+  return latestSuccessRelease
 }

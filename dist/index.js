@@ -50234,11 +50234,10 @@ const getLatestSuccessfulRelease = async () => {
     }));
     const sortedReleases = [...commitStatus.filter(truthy_1.truthy)].sort((a, b) => (0, date_fns_1.isBefore)(new Date(a.commitDate), new Date(b.commitDate)) ? 1 : -1);
     const latestSuccessRelease = sortedReleases.find(({ status, conclusion }) => status === 'completed' && conclusion === 'success');
-    if (!sortedReleases[0]) {
-        throw new Error(`Unable to find latest successful release`);
+    if (!latestSuccessRelease) {
+        throw new Error('Unable to find latest successful release');
     }
-    console.log('FOUND!', sortedReleases[0], latestSuccessRelease);
-    return sortedReleases[0];
+    return latestSuccessRelease;
 };
 exports.getLatestSuccessfulRelease = getLatestSuccessfulRelease;
 
