@@ -50232,8 +50232,10 @@ const getLatestSuccessfulRelease = async () => {
         const workflowRun = await (0, get_latest_workflow_1.getLatestWorkflow)(octokit, { sha: commit.sha }, REPO_OWNER, REPO, RELEASE_WORKFLOW_PATH);
         return { ...commit, ...workflowRun };
     }));
+    console.log('commitStatus', commitStatus);
     const sortedReleases = [...commitStatus.filter(truthy_1.truthy)].sort((a, b) => (0, date_fns_1.isBefore)(new Date(a.commitDate), new Date(b.commitDate)) ? 1 : -1);
     const latestSuccessRelease = sortedReleases.find(({ status, conclusion }) => status === 'completed' && conclusion === 'success');
+    console.log('sortedReleases', sortedReleases);
     if (!latestSuccessRelease) {
         throw new Error('Unable to find latest successful release');
     }
