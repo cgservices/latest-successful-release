@@ -1,5 +1,5 @@
 import { getLatestSuccessfulRelease } from './main'
-import { setOutput, info, warning } from '@actions/core'
+import { setOutput, info } from '@actions/core'
 
 getLatestSuccessfulRelease()
   .then(latestSuccessfulRelease => {
@@ -7,6 +7,6 @@ getLatestSuccessfulRelease()
     setOutput('commit-sha', JSON.stringify(latestSuccessfulRelease.sha))
   })
   .catch(error => {
-    warning('Unable to get latest successful release')
+    info(error)
     setOutput('error', JSON.stringify(error.message))
   })
