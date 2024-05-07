@@ -59,7 +59,5 @@ jobs:
 
       - name: Print Output
         run:
-          echo "value=${steps.latest-successful-release.outputs.commit-sha}" >>
-          "$GITHUB_OUTPUT"
-          # echo ${{
-          # steps.latest-successful-release.outputs.commit-sha }}
+          echo "value=${{steps.latest-successful-release.outputs.commit-sha}}"
+          >> "$GITHUB_OUTPUT"
