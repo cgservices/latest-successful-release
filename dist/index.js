@@ -52143,13 +52143,12 @@ const main_1 = __nccwpck_require__(9356);
 const core_1 = __nccwpck_require__(9093);
 (0, main_1.getLatestSuccessfulRelease)()
     .then(latestSuccessfulRelease => {
-    (0, core_1.info)('SUCCESS: Output to the actions build log');
-    const output = (0, core_1.setOutput)('latest-successful-release', JSON.stringify(latestSuccessfulRelease));
-    console.log(output);
+    (0, core_1.info)('Found latest successful release');
+    (0, core_1.setOutput)('commit-sha', JSON.stringify(latestSuccessfulRelease.sha));
 })
     .catch(error => {
-    console.warn(`Unable to get latest successful release: ${error.message}`);
-    (0, core_1.setOutput)('Unable to get latest successful release', JSON.stringify(error.message));
+    (0, core_1.warning)('Unable to get latest successful release');
+    (0, core_1.setOutput)('error', JSON.stringify(error.message));
 });
 
 })();
