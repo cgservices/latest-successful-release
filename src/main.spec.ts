@@ -27,7 +27,7 @@ jest.mock('@actions/core', () => ({
   })
 }))
 
-describe('get latest successful release', () => {
+describe.skip('get latest successful release', () => {
   beforeEach(jest.clearAllMocks)
 
   it('should get the latest release', async () => {

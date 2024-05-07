@@ -61,4 +61,5 @@ jobs:
         id: output
         run:
           echo "LALLALALLALA -> ${{
-          steps.latest-successful-release.outputs.latest-successful-release }}"
+          steps.latest-successful-release.outputs.latest-successful-release.value
+          }}"
