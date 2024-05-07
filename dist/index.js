@@ -50147,6 +50147,7 @@ const getLatestWorkflow = async (octokit, options = {}, owner, repo, workflowPat
         per_page: 100,
         headers
     });
+    console.log('workflowRuns', workflowRuns);
     const releaseWorkflows = workflowRuns.data.workflow_runs
         .filter(({ path }) => path === workflowPath)
         .map(workflowRun => ({
@@ -50158,6 +50159,7 @@ const getLatestWorkflow = async (octokit, options = {}, owner, repo, workflowPat
         status: workflowRun.status,
         conclusion: workflowRun.conclusion
     }));
+    console.log('releaseWorkflows', releaseWorkflows);
     if (!releaseWorkflows.length) {
         return null;
     }
