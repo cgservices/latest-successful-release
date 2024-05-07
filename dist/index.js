@@ -52141,21 +52141,14 @@ var exports = __webpack_exports__;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const main_1 = __nccwpck_require__(9356);
 const core_1 = __nccwpck_require__(9093);
-// const program = new Command().option('--jsonOutputFilename <string>')
-// setOutput('jsonOutputFilename', program.opts().jsonOutputFilename)
-// program.parse()
-// const options = program.opts()
-// const { jsonOutputFilename = '/tmp/latest-successful-release.txt' } = options
 (0, main_1.getLatestSuccessfulRelease)()
     .then(latestSuccessfulRelease => {
     console.log(`Latest successful release: ${JSON.stringify(latestSuccessfulRelease)}`);
     (0, core_1.setOutput)('latestSuccessfulRelease', JSON.stringify(latestSuccessfulRelease));
-    // writeFileSync(jsonOutputFilename, latestSuccessfulRelease.sha)
 })
     .catch(error => {
     console.warn(`Unable to get latest successful release: ${error.message}`);
     (0, core_1.setOutput)('Unable to get latest successful release', JSON.stringify(error.message));
-    // writeFileSync(jsonOutputFilename, '')
 });
 
 })();
