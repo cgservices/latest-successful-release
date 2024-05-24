@@ -1,4 +1,4 @@
-import * as index from '../src/index';
+import * as index from '../src/index'
 
 const mockGetLatestSuccessfulRelease = jest.fn()
 const mockSetOutput = jest.fn()
