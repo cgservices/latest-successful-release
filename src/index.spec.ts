@@ -1,29 +1,36 @@
-import * as main from './main'
+const mockGetLatestSuccessfulRelease = jest.fn()
+const mockSetOutput = jest.fn()
+const mockInfo = jest.fn()
 
-// const runMock = jest.spyOn(main, 'getLatestSuccessfulRelease').mockResolvedValue({ runNumber: 1 })
+jest.mock('./main', () => ({
+  getLatestSuccessfulRelease: mockGetLatestSuccessfulRelease
+}))
+jest.mock('@actions/core', () => ({
+  setOutput: mockSetOutput,
+  info: mockInfo
+}))
 
-// describe('index', () => {
-//   it('calls run when imported', async () => {
-//     // eslint-disable-next-line @typescript-eslint/no-require-imports
-//     require('../src/index')
-
-//     expect(runMock).toHaveBeenCalled()
-//   })
-// })
-describe.skip('index', () => {
-  it('should set default jsonOutputFilename', () => {
-    const options: { jsonOutputFilename?: string } = {}
-    require('../src/index')
-    expect(options.jsonOutputFilename).toBe(
-      '/tmp/latest-successful-release.txt'
-    )
+describe('index', () => {
+  beforeEach(() => {
+    jest.resetAllMocks()
+    mockGetLatestSuccessfulRelease.mockClear()
   })
 
-  it('should override jsonOutputFilename', () => {
-    const options: { jsonOutputFilename?: string } = {
-      jsonOutputFilename: '/path/to/output.txt'
-    }
-    require('../src/index')
-    expect(options.jsonOutputFilename).toBe('/path/to/output.txt')
+  it('should set the commit-sha output when getLatestSuccessfulRelease resolves', async () => {
+    const mockLatestSuccessfulRelease = { sha: 'abc123' }
+
+    mockGetLatestSuccessfulRelease.mockResolvedValue(
+      mockLatestSuccessfulRelease
+    )
+
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    await require('../src/index')
+
+    expect(mockGetLatestSuccessfulRelease).toHaveBeenCalled()
+    expect(mockInfo).toHaveBeenCalledWith('Found latest successful release')
+    expect(mockSetOutput).toHaveBeenCalledWith(
+      'commit-sha',
+      JSON.stringify(mockLatestSuccessfulRelease.sha)
+    )
   })
 })
