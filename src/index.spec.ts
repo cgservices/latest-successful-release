@@ -1,5 +1,3 @@
-import * as index from '../src/index'
-
 const mockGetLatestSuccessfulRelease = jest.fn()
 const mockSetOutput = jest.fn()
 const mockInfo = jest.fn()
