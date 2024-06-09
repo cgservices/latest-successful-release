@@ -116,7 +116,12 @@ describe('get latest workflow', () => {
       }
     })
 
-    const latestRelease = await getLatestWorkflow(client, {}, 'owner', 'repo')
+    const latestRelease = await getLatestWorkflow(
+      client,
+      undefined,
+      'owner',
+      'repo'
+    )
     expect(latestRelease).toBeNull()
   })
 })

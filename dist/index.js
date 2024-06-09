@@ -50115,6 +50115,33 @@ function wrappy (fn, cb) {
 
 /***/ }),
 
+/***/ 2694:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.run = void 0;
+const main_1 = __nccwpck_require__(9356);
+const core_1 = __nccwpck_require__(9093);
+const run = async () => {
+    try {
+        const latestRelease = await (0, main_1.getLatestSuccessfulRelease)();
+        (0, core_1.info)('Found latest successful release');
+        (0, core_1.setOutput)('commit-sha', JSON.stringify(latestRelease.sha));
+    }
+    catch (error) {
+        const errorMessage = "Couldn't find latest successful release";
+        (0, core_1.info)(errorMessage);
+        (0, core_1.setOutput)('error', JSON.stringify(errorMessage));
+    }
+};
+exports.run = run;
+(0, exports.run)();
+
+
+/***/ }),
+
 /***/ 1103:
 /***/ ((__unused_webpack_module, exports) => {
 
@@ -50239,7 +50266,6 @@ const getLatestSuccessfulRelease = async () => {
     if (!latestSuccessRelease) {
         throw new Error('Unable to find latest successful release');
     }
-    console.log('latestSuccessRelease', latestSuccessRelease);
     return latestSuccessRelease;
 };
 exports.getLatestSuccessfulRelease = getLatestSuccessfulRelease;
@@ -52134,32 +52160,13 @@ module.exports = parseParams
 /******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
 /******/ 	
 /************************************************************************/
-var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be in strict mode.
-(() => {
-"use strict";
-var exports = __webpack_exports__;
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const main_1 = __nccwpck_require__(9356);
-const core_1 = __nccwpck_require__(9093);
-const run = async () => {
-    try {
-        const latestRelease = await (0, main_1.getLatestSuccessfulRelease)();
-        (0, core_1.info)('Found latest successful release');
-        (0, core_1.setOutput)('commit-sha', JSON.stringify(latestRelease.sha));
-    }
-    catch (error) {
-        const errorMessage = "Couldn't find latest successful release";
-        (0, core_1.info)(errorMessage);
-        (0, core_1.setOutput)('error', JSON.stringify(errorMessage));
-    }
-};
-run();
-
-})();
-
-module.exports = __webpack_exports__;
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module is referenced by other modules so it can't be inlined
+/******/ 	var __webpack_exports__ = __nccwpck_require__(2694);
+/******/ 	module.exports = __webpack_exports__;
+/******/ 	
 /******/ })()
 ;
 //# sourceMappingURL=index.js.map

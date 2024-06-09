@@ -57,7 +57,6 @@ export const getLatestSuccessfulRelease = async () => {
   if (!latestSuccessRelease) {
     throw new Error('Unable to find latest successful release')
   }
-  console.log('latestSuccessRelease', latestSuccessRelease)
 
   return latestSuccessRelease
 }

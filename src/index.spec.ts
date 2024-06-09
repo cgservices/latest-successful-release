@@ -2,6 +2,8 @@ const mockGetLatestSuccessfulRelease = jest.fn()
 const mockSetOutput = jest.fn()
 const mockInfo = jest.fn()
 
+import { run } from './index'
+
 jest.mock('./main', () => ({
   getLatestSuccessfulRelease: mockGetLatestSuccessfulRelease
 }))
@@ -23,14 +25,28 @@ describe('index', () => {
       mockLatestSuccessfulRelease
     )
 
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    await require('../src/index')
+    await run()
 
     expect(mockGetLatestSuccessfulRelease).toHaveBeenCalled()
     expect(mockInfo).toHaveBeenCalledWith('Found latest successful release')
     expect(mockSetOutput).toHaveBeenCalledWith(
       'commit-sha',
       JSON.stringify(mockLatestSuccessfulRelease.sha)
+    )
+  })
+
+  it('should handle errors', async () => {
+    const error = new Error("Couldn't find latest successful release")
+    mockGetLatestSuccessfulRelease.mockRejectedValue(error)
+
+    await run()
+
+    expect(mockInfo).toHaveBeenCalledWith(
+      "Couldn't find latest successful release"
+    )
+    expect(mockSetOutput).toHaveBeenCalledWith(
+      'error',
+      JSON.stringify("Couldn't find latest successful release")
     )
   })
 })

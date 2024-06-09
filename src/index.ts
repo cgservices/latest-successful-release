@@ -1,7 +1,7 @@
 import { getLatestSuccessfulRelease } from './main'
 import { setOutput, info } from '@actions/core'
 
-const run = async () => {
+export const run = async () => {
   try {
     const latestRelease = await getLatestSuccessfulRelease()
     info('Found latest successful release')
