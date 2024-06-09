@@ -2,6 +2,7 @@ const mockGetLatestSuccessfulRelease = jest.fn()
 const mockSetOutput = jest.fn()
 const mockInfo = jest.fn()
 
+// eslint-disable-next-line import/first
 import { run } from './index'
 
 jest.mock('./main', () => ({
@@ -28,7 +29,9 @@ describe('index', () => {
     await run()
 
     expect(mockGetLatestSuccessfulRelease).toHaveBeenCalled()
-    expect(mockInfo).toHaveBeenCalledWith('Found latest successful release')
+    expect(mockInfo).toHaveBeenCalledWith(
+      'Found latest successful release, setting output "abc123"'
+    )
     expect(mockSetOutput).toHaveBeenCalledWith(
       'commit-sha',
       JSON.stringify(mockLatestSuccessfulRelease.sha)

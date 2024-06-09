@@ -50127,7 +50127,7 @@ const core_1 = __nccwpck_require__(9093);
 const run = async () => {
     try {
         const latestRelease = await (0, main_1.getLatestSuccessfulRelease)();
-        (0, core_1.info)('Found latest successful release');
+        (0, core_1.info)(`Found latest successful release, setting output ${JSON.stringify(latestRelease.sha)}`);
         (0, core_1.setOutput)('commit-sha', JSON.stringify(latestRelease.sha));
     }
     catch (error) {
